@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --background: #09090b;
+  --foreground: #eceef0;
+  --card: #101014;
+  --card-2: #141418;
+  --line: #23232c;
+  --line-strong: #32323c;
+  --ink: #0c0c0e;
+  --faint: #b7cfe3;
+  --faint-2: #8fb4cc;
+  --muted: #8b9199;
+  --dim: #5c626a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-faint: var(--faint);
+  --color-faint-2: var(--faint-2);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  background-image:
+    linear-gradient(rgba(183, 207, 227, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(183, 207, 227, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-attachment: fixed;
+  min-height: 100%;
+}
+
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -8%, rgba(143, 180, 204, 0.14), transparent 55%),
+    radial-gradient(ellipse 40% 30% at 100% 0%, rgba(183, 207, 227, 0.06), transparent 40%);
+  z-index: 0;
+}
+
+#__next,
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: rgba(206, 213, 217, 0.28);
+  color: #0c0c0e;
+}
+
+input,
+textarea {
+  caret-color: var(--faint);
+}
+
+@keyframes scan-bar {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+.scan-bar {
+  animation: scan-bar 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse-faint {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.pulse-faint {
+  animation: pulse-faint 1.6s ease-in-out infinite;
+}
