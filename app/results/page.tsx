@@ -8,8 +8,8 @@ import { useSearchParams } from "next/navigation";
 
 const stages = [
   "Parsing your idea",
-  "Scanning Marc Lou's portfolio",
-  "Checking Product Hunt & indie makers",
+  "Scanning indie product catalogs",
+  "Checking Product Hunt & directories",
   "Ranking overlaps",
 ];
 

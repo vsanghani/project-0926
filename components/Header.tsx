@@ -23,7 +23,7 @@ export function Header() {
             ≈
           </span>
           <span className="leading-tight">
-            <span className="block text-[15px] font-semibold tracking-tight">Twinly</span>
+            <span className="block text-[15px] font-semibold tracking-tight">Appkin</span>
             <span className="block font-mono text-[11px] text-faint-2">v0.1.0</span>
           </span>
         </Link>

@@ -15,7 +15,7 @@ const steps = [
   {
     n: "02",
     title: "We scan what's live",
-    body: "The first catalog pulls from Marc Lou's products, Levelsio, Product Hunt hits, and indie makers.",
+    body: "The first catalog pulls from Product Hunt, Indie Hackers, directories, and indie products already charging users.",
   },
   {
     n: "03",
@@ -28,13 +28,13 @@ const features = [
   {
     icon: "≈",
     title: "Idea-to-twin search",
-    body: "Describe a product in plain language. Twinly ranks live apps by overlap instead of making you browse directories.",
+    body: "Describe a product in plain language. Appkin ranks live apps by overlap instead of making you browse directories.",
     note: "♡ Skip the 40-tab research night",
   },
   {
     icon: "{}",
-    title: "Builder catalogs",
-    body: "Marc Lou's portfolio, Pieter Levels, HeadshotPro, Chatbase, Cal.com — products that already have users, not pitch decks.",
+    title: "Live product catalogs",
+    body: "ShipFast, Nomad List, HeadshotPro, Chatbase, Cal.com — products that already have users, not pitch decks.",
     note: "♡ Real products, public URLs",
   },
   {
@@ -52,13 +52,13 @@ const features = [
   {
     icon: "//",
     title: "Source-aware",
-    body: "Filter by where a product came from. Indie portfolios, launch sites, and marketplaces are different kinds of signal.",
+    body: "Filter by where a product came from. Indie products, launch sites, and marketplaces are different kinds of signal.",
     note: "♡ Provenance on every card",
   },
   {
     icon: ">>",
     title: "Built for the blank page",
-    body: "Use Twinly before you open Cursor. If a twin is already live, you'll know in one screen.",
+    body: "Use Appkin before you open Cursor. If a twin is already live, you'll know in one screen.",
     note: "♡ Look, then ship",
   },
 ];
@@ -100,7 +100,7 @@ export default function HomePage() {
           <span className="text-zinc-400">you didn&apos;t know existed.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl font-mono text-sm leading-7 text-muted md:text-[15px]">
-          {`// Paste your idea. We'll show similar apps already live — Marc Lou, Product Hunt, indie makers, and more.`}
+          {`// Paste your idea. We'll show similar apps already live — Product Hunt, Indie Hackers, directories, and more.`}
         </p>
         <div className="mt-10 text-left">
           <IdeaComposer />
@@ -168,7 +168,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading
           badge="> the_product"
-          title="What Twinly does"
+          title="What Appkin does"
           comment="Every feature is a step we used to do by hand."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

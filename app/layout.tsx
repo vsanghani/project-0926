@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Twinly — Find live twins of your idea",
-    template: "%s · Twinly",
+    default: "Appkin — Find live twins of your idea",
+    template: "%s · Appkin",
   },
   description:
-    "Paste an app idea. Twinly shows similar products already live — sourced from Marc Lou, Product Hunt, indie makers, and more.",
+    "Paste an app idea. Appkin shows similar products already live — sourced from Product Hunt, Indie Hackers, directories, and more.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

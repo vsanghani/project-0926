@@ -1,7 +1,5 @@
 export type SourceId =
-  | "marc-lou"
-  | "pieter-levels"
-  | "indie-maker"
+  | "indie-products"
   | "product-hunt"
   | "indie-hackers"
   | "directories";

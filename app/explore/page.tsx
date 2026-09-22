@@ -36,7 +36,7 @@ function ExploreInner() {
       if (source !== "all" && app.sourceId !== source) return false;
       if (category !== "all" && app.category !== category) return false;
       if (!q) return true;
-      const blob = `${app.name} ${app.tagline} ${app.maker} ${app.tags.join(" ")}`.toLowerCase();
+      const blob = `${app.name} ${app.tagline} ${app.maker} ${app.category} ${app.tags.join(" ")}`.toLowerCase();
       return blob.includes(q);
     });
   }, [query, source, category]);
@@ -49,14 +49,14 @@ function ExploreInner() {
         Explore live apps
       </h1>
       <p className="mt-4 max-w-2xl font-mono text-sm leading-6 text-muted">
-        {`// ${liveApps.length} products from Marc Lou, Levelsio, Product Hunt, and indie makers. First draft, curated.`}
+        {`// ${liveApps.length} products from Product Hunt, Indie Hackers, directories, and indie sites. First draft, curated.`}
       </p>
 
       <div className="mt-8 flex flex-col gap-3 md:flex-row">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Filter by name, maker, tag…"
+          placeholder="Filter by name, tag, category…"
           className="w-full rounded-xl border border-line bg-card px-4 py-3 font-mono text-sm outline-none placeholder:text-dim focus:border-faint/40"
         />
       </div>

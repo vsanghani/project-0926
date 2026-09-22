@@ -25,9 +25,9 @@ export function AppCard({ app, match }: AppCardProps) {
           <div>
             <h3 className="text-[15px] font-semibold leading-tight">{app.name}</h3>
             <p className="mt-0.5 font-mono text-[11px] text-muted">
-              {app.maker === sourceName(app.sourceId)
-                ? app.maker
-                : `${app.maker} · ${sourceName(app.sourceId)}`}
+              {app.maker !== app.name
+                ? `${app.maker} · ${sourceName(app.sourceId)}`
+                : sourceName(app.sourceId)}
             </p>
           </div>
         </div>

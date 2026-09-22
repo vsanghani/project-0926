@@ -171,10 +171,12 @@ export function matchIdea(idea: string, catalog: LiveApp[] = liveApps): MatchRes
       }
     }
 
-    const makerBits = tokenize(app.maker);
-    if (makerBits.some((part) => tokens.includes(part))) {
-      raw += 10;
-      reasons.push(`Same maker orbit: ${app.maker}`);
+    if (app.maker !== app.name) {
+      const makerBits = tokenize(app.maker);
+      if (makerBits.some((part) => tokens.includes(part))) {
+        raw += 10;
+        reasons.push(`Same project family: ${app.maker}`);
+      }
     }
 
     const source = sources.find((item) => item.id === app.sourceId);

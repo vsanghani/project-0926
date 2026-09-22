@@ -13,10 +13,10 @@ const columns = [
   {
     title: "Catalog",
     links: [
-      { href: "/explore?source=marc-lou", label: "Marc Lou" },
-      { href: "/explore?source=pieter-levels", label: "Pieter Levels" },
+      { href: "/explore?source=indie-products", label: "Indie products" },
       { href: "/explore?source=product-hunt", label: "Product Hunt" },
-      { href: "/explore?source=indie-maker", label: "Indie makers" },
+      { href: "/explore?source=indie-hackers", label: "Indie Hackers" },
+      { href: "/explore?source=directories", label: "Directories" },
     ],
   },
   {
@@ -24,7 +24,7 @@ const columns = [
     links: [
       { href: "/about", label: "About" },
       { href: "/sources", label: "How we source" },
-      { href: "mailto:hello@twinly.app", label: "Contact" },
+      { href: "mailto:hello@appkin.app", label: "Contact" },
     ],
   },
 ];
@@ -38,11 +38,11 @@ export function Footer() {
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-faint font-mono font-semibold text-ink">
               ≈
             </span>
-            <span className="font-semibold">Twinly</span>
+            <span className="font-semibold">Appkin</span>
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-6 text-muted">
             One place for builders to paste an idea and see similar apps already
-            live — Marc Lou, Product Hunt, indie makers, and more.
+            live — Product Hunt, Indie Hackers, directories, and more.
           </p>
         </div>
         {columns.map((column) => (
@@ -64,7 +64,7 @@ export function Footer() {
         ))}
       </div>
       <div className="mx-auto flex max-w-6xl flex-col gap-2 border-t border-line px-4 py-5 text-xs text-dim md:flex-row md:items-center md:justify-between md:px-6">
-        <p className="font-mono">{">"} 2026 Twinly. First draft.</p>
+        <p className="font-mono">{">"} 2026 Appkin. First draft.</p>
         <p>Made for builders who look before they ship.</p>
       </div>
     </footer>

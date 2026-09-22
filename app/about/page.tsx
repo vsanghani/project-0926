@@ -17,7 +17,7 @@ const journey = [
   {
     year: "2024",
     title: "The 40-tab night",
-    body: "Product Hunt, Indie Hackers, Marc Lou's site, AlternativeTo, Twitter lists. Copy-paste into Notion. Repeat for every idea.",
+    body: "Product Hunt, Indie Hackers, AlternativeTo, Twitter lists. Copy-paste into Notion. Repeat for every idea.",
   },
   {
     year: "2025",
@@ -26,7 +26,7 @@ const journey = [
   },
   {
     year: "2026",
-    title: "Twinly, first draft",
+    title: "Appkin, first draft",
     body: "A one-stop check: describe the product, scan a real catalog, read the overlap and the remaining gap.",
   },
 ];
@@ -40,8 +40,8 @@ const features = [
   },
   {
     icon: "{}",
-    title: "Public builder portfolios",
-    body: "Marc Lou publishes a pile of real businesses. Levelsio does too. Those catalogs are more useful than another idea generator.",
+    title: "Public product catalogs",
+    body: "ShipFast, Nomad List, TrustMRR, PhotoAI — live sites with users. Those catalogs are more useful than another idea generator.",
     note: "♡ Ship logs, not mood boards",
   },
   {
@@ -102,7 +102,7 @@ export default function AboutPage() {
               ≈
             </span>
             <div>
-              <h2 className="text-2xl font-semibold">Hey, this is Twinly</h2>
+              <h2 className="text-2xl font-semibold">Hey, this is Appkin</h2>
               <p className="mt-1 font-mono text-xs text-muted">a look-before-you-ship desk</p>
             </div>
           </div>
@@ -115,9 +115,8 @@ export default function AboutPage() {
             </p>
             <p>
               The honest answer used to take a night. You&apos;d open Product Hunt,
-              skim Indie Hackers, remember that{" "}
-              <span className="text-amber-200">Marc Lou</span> has a dozen live
-              businesses, check AlternativeTo, and still miss the obvious twin.
+              skim Indie Hackers, check AlternativeTo, and still miss the obvious
+              twin sitting on a live URL.
             </p>
             <p>
               Idea generators make this worse. They hand you a prompt and a TAM
@@ -125,12 +124,12 @@ export default function AboutPage() {
               things already charging money.
             </p>
             <p>
-              Twinly is the opposite. You paste the idea. We show similar apps
+              Appkin is the opposite. You paste the idea. We show similar apps
               that are live in the real world, where we pulled them from, and
               what gap is still sitting next to them.
             </p>
             <p className="border-l-2 border-faint/40 pl-4 text-foreground">
-              &quot;I don&apos;t need more ideas. I need to know who already shipped
+              &quot;I don&apos;t need more ideas. I need to know what already shipped
               mine.&quot;
             </p>
           </div>
