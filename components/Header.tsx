@@ -17,18 +17,12 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line/80 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 md:px-6">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-faint font-mono text-lg font-semibold text-ink">
-            ≈
-          </span>
-          <span className="leading-tight">
-            <span className="block text-[15px] font-semibold tracking-tight">Appkin</span>
-            <span className="block font-mono text-[11px] text-faint-2">v0.1.0</span>
-          </span>
+      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3.5 md:px-6">
+        <Link href="/" className="shrink-0 text-[15px] font-semibold tracking-tight">
+          Appkin
         </Link>
 
-        <nav className="ml-4 hidden items-center gap-1 md:flex">
+        <nav className="ml-6 hidden items-center gap-1 md:flex">
           {links.map((link) => {
             const active =
               link.href === "/"
@@ -40,11 +34,11 @@ export function Header() {
                 href={link.href}
                 className={
                   active
-                    ? "rounded-lg bg-faint/10 px-3 py-1.5 font-mono text-sm text-faint"
-                    : "rounded-lg px-3 py-1.5 text-sm text-muted transition-colors hover:text-foreground"
+                    ? "rounded-full bg-faint/12 px-3 py-1.5 text-sm text-foreground"
+                    : "rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:text-foreground"
                 }
               >
-                {active ? `> ${link.label}` : link.label}
+                {link.label}
               </Link>
             );
           })}
@@ -59,24 +53,24 @@ export function Header() {
           </button>
           <Link
             href="/"
-            className="rotate-2 rounded-xl bg-faint px-4 py-2 text-left text-[13px] font-semibold leading-tight text-ink transition hover:rotate-0 hover:bg-white"
+            className="rounded-full bg-faint px-4 py-2 text-sm font-semibold text-ink transition hover:bg-white"
           >
-            Check Your
-            <br />
-            Idea{" "}
-            <span className="font-mono" aria-hidden>
-              {">"}
-            </span>
+            Check an idea
           </Link>
         </div>
 
         <button
           type="button"
-          className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg border border-line text-faint md:hidden"
+          className="ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-line text-foreground md:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-label="Toggle menu"
+          aria-expanded={open}
         >
-          <span className="font-mono text-lg">{open ? "x" : "="}</span>
+          <span className="flex w-4 flex-col gap-1" aria-hidden>
+            <span className={`block h-px bg-current transition ${open ? "translate-y-[5px] rotate-45" : ""}`} />
+            <span className={`block h-px bg-current transition ${open ? "opacity-0" : ""}`} />
+            <span className={`block h-px bg-current transition ${open ? "-translate-y-[5px] -rotate-45" : ""}`} />
+          </span>
         </button>
       </div>
 
@@ -96,9 +90,9 @@ export function Header() {
             <Link
               href="/"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-xl bg-faint px-3 py-2.5 text-center text-sm font-semibold text-ink"
+              className="mt-2 rounded-full bg-faint px-3 py-2.5 text-center text-sm font-semibold text-ink"
             >
-              Check Your Idea
+              Check an idea
             </Link>
           </nav>
         </div>

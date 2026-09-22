@@ -6,7 +6,7 @@ function sourceName(id: LiveApp["sourceId"]) {
 }
 
 function initial(name: string) {
-  return name.replace(/[^A-Za-z0-9]/g, "").slice(0, 1).toUpperCase() || "≈";
+  return name.replace(/[^A-Za-z0-9]/g, "").slice(0, 1).toUpperCase() || "A";
 }
 
 type AppCardProps = {
@@ -19,12 +19,12 @@ export function AppCard({ app, match }: AppCardProps) {
     <article className="flex h-full flex-col rounded-2xl border border-line bg-card p-5 transition hover:border-faint/25">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-faint/12 font-mono text-lg font-semibold text-faint">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-faint/12 text-sm font-semibold text-faint">
             {initial(app.name)}
           </span>
           <div>
             <h3 className="text-[15px] font-semibold leading-tight">{app.name}</h3>
-            <p className="mt-0.5 font-mono text-[11px] text-muted">
+            <p className="mt-0.5 text-xs text-muted">
               {app.maker !== app.name
                 ? `${app.maker} · ${sourceName(app.sourceId)}`
                 : sourceName(app.sourceId)}
@@ -32,11 +32,11 @@ export function AppCard({ app, match }: AppCardProps) {
           </div>
         </div>
         {match ? (
-          <span className="rounded-lg bg-faint/10 px-2 py-1 font-mono text-xs text-faint">
+          <span className="rounded-full bg-faint/10 px-2.5 py-1 text-xs font-medium text-faint">
             {match.score}%
           </span>
         ) : (
-          <span className="rounded-lg border border-line px-2 py-1 font-mono text-[11px] text-dim">
+          <span className="rounded-full border border-line px-2.5 py-1 text-[11px] text-dim">
             {app.category}
           </span>
         )}
@@ -47,8 +47,8 @@ export function AppCard({ app, match }: AppCardProps) {
       {match?.reasons?.length ? (
         <ul className="mt-4 space-y-1.5">
           {match.reasons.map((reason) => (
-            <li key={reason} className="font-mono text-[11px] leading-5 text-faint-2">
-              {`// ${reason}`}
+            <li key={reason} className="text-xs leading-5 text-faint-2">
+              {reason}
             </li>
           ))}
         </ul>
@@ -60,7 +60,7 @@ export function AppCard({ app, match }: AppCardProps) {
         {app.tags.slice(0, 4).map((tag) => (
           <span
             key={tag}
-            className="rounded-md border border-line px-2 py-0.5 font-mono text-[10px] text-muted"
+            className="rounded-full border border-line px-2 py-0.5 text-[11px] text-muted"
           >
             {tag}
           </span>
@@ -71,7 +71,7 @@ export function AppCard({ app, match }: AppCardProps) {
         href={app.url}
         target="_blank"
         rel="noreferrer"
-        className="mt-5 inline-flex items-center gap-1 font-mono text-xs text-faint hover:text-white"
+        className="mt-5 inline-flex items-center gap-1 text-xs text-faint hover:text-white"
       >
         {app.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
         <span aria-hidden>↗</span>

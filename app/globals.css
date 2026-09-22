@@ -42,11 +42,6 @@ body {
 
 body {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  background-image:
-    linear-gradient(rgba(183, 207, 227, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(183, 207, 227, 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
-  background-attachment: fixed;
   min-height: 100%;
 }
 

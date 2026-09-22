@@ -26,40 +26,34 @@ const steps = [
 
 const features = [
   {
-    icon: "≈",
     title: "Idea-to-twin search",
     body: "Describe a product in plain language. Appkin ranks live apps by overlap instead of making you browse directories.",
-    note: "♡ Skip the 40-tab research night",
+    note: "Skip the 40-tab research night",
   },
   {
-    icon: "{}",
     title: "Live product catalogs",
     body: "ShipFast, Nomad List, HeadshotPro, Chatbase, Cal.com — products that already have users, not pitch decks.",
-    note: "♡ Real products, public URLs",
+    note: "Real products, public URLs",
   },
   {
-    icon: "%",
     title: "Overlap scoring",
     body: "Every result shows why it matched: shared tags, category, language. You can see the twin, not just a logo grid.",
-    note: "♡ Know how close you are",
+    note: "Know how close you are",
   },
   {
-    icon: "<>",
     title: "The remaining gap",
     body: "Each live app includes a wedge note — what's still open around that product so you don't freeze at 'it exists'.",
-    note: "♡ Existing ≠ unavailable",
+    note: "Existing does not mean unavailable",
   },
   {
-    icon: "//",
     title: "Source-aware",
     body: "Filter by where a product came from. Indie products, launch sites, and marketplaces are different kinds of signal.",
-    note: "♡ Provenance on every card",
+    note: "Provenance on every card",
   },
   {
-    icon: ">>",
     title: "Built for the blank page",
     body: "Use Appkin before you open Cursor. If a twin is already live, you'll know in one screen.",
-    note: "♡ Look, then ship",
+    note: "Look, then ship",
   },
 ];
 
@@ -88,19 +82,17 @@ export default function HomePage() {
   return (
     <div>
       <section className="mx-auto max-w-3xl px-4 pb-8 pt-16 text-center md:px-6 md:pt-24">
-        <div className="mb-8 flex justify-center">
-          <span className="inline-flex items-center gap-2 rounded-lg border border-line bg-card px-3 py-1 font-mono text-[13px] text-faint">
-            <span aria-hidden>≈</span> find_twins
-          </span>
-        </div>
+        <p className="mb-5 text-[11px] font-medium uppercase tracking-[0.16em] text-faint">
+          Find twins
+        </p>
         <h1 className="text-4xl font-semibold tracking-tight md:text-6xl md:leading-[1.08]">
-          <span className="text-faint">{">"} </span>
           Don&apos;t build a twin
           <br />
           <span className="text-zinc-400">you didn&apos;t know existed.</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-xl font-mono text-sm leading-7 text-muted md:text-[15px]">
-          {`// Paste your idea. We'll show similar apps already live — Product Hunt, Indie Hackers, directories, and more.`}
+        <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-muted md:text-[15px]">
+          Paste your idea. We&apos;ll show similar apps already live — Product Hunt,
+          Indie Hackers, directories, and more.
         </p>
         <div className="mt-10 text-left">
           <IdeaComposer />
@@ -108,7 +100,7 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-10 md:px-6">
-        <p className="mb-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-dim">
+        <p className="mb-4 text-center text-[11px] font-medium uppercase tracking-[0.16em] text-dim">
           Sourced from
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -126,14 +118,14 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading
-          badge="> how_it_works"
+          badge="How it works"
           title="Three steps. Then you know."
           comment="No account. No 40-minute research rabbit hole."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {steps.map((step) => (
             <article key={step.n} className="rounded-2xl border border-line bg-card p-6">
-              <p className="font-mono text-sm text-faint">{step.n}</p>
+              <p className="text-sm font-medium text-faint">{step.n}</p>
               <h3 className="mt-4 text-lg font-semibold">{step.title}</h3>
               <p className="mt-2 text-sm leading-6 text-muted">{step.body}</p>
             </article>
@@ -143,7 +135,7 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading
-          badge="> live_now"
+          badge="Live now"
           title="A slice of what's already shipping"
           comment="Featured from the first catalog. Explore the rest."
         />
@@ -157,17 +149,14 @@ export default function HomePage() {
             href="/explore"
             className="inline-flex rounded-xl border border-line bg-card px-4 py-2.5 text-sm text-faint transition hover:border-faint/40"
           >
-            Browse the catalog{" "}
-            <span className="ml-1 font-mono" aria-hidden>
-              {">"}
-            </span>
+            Browse the catalog
           </Link>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading
-          badge="> the_product"
+          badge="The product"
           title="What Appkin does"
           comment="Every feature is a step we used to do by hand."
         />
@@ -180,7 +169,7 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading
-          badge="> philosophy"
+          badge="Philosophy"
           title="How we think about twins"
           comment="Existing products are teachers, not stop signs."
         />
@@ -198,16 +187,13 @@ export default function HomePage() {
         <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
           Ready to check your idea?
         </h2>
-        <p className="mt-3 font-mono text-sm text-muted">{`// Look first. Then ship.`}</p>
+        <p className="mt-3 text-sm text-muted">Look first. Then ship.</p>
         <div className="mt-8">
           <Link
             href="/"
-            className="inline-flex rotate-1 rounded-2xl bg-faint px-6 py-3 text-sm font-semibold text-ink transition hover:rotate-0 hover:bg-white"
+            className="inline-flex rounded-full bg-faint px-6 py-3 text-sm font-semibold text-ink transition hover:bg-white"
           >
-            Find live twins{" "}
-            <span className="font-mono" aria-hidden>
-              {">"}
-            </span>
+            Find live twins
           </Link>
         </div>
       </section>
