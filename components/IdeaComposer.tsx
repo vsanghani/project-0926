@@ -37,23 +37,20 @@ export function IdeaComposer({ initialValue = "", compact = false }: IdeaCompose
           onChange={(event) => setValue(event.target.value)}
           rows={compact ? 4 : 6}
           placeholder="Describe the app you want to build. Be specific: who it's for, what it does, how it makes money."
-          className="w-full resize-none bg-transparent px-4 py-4 font-mono text-sm leading-6 text-foreground outline-none placeholder:text-dim md:px-5 md:text-[15px]"
+          className="w-full resize-none bg-transparent px-4 py-4 text-sm leading-6 text-foreground outline-none placeholder:text-dim md:px-5 md:text-[15px]"
         />
         <div className="flex flex-col gap-3 border-t border-line px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
-          <p className="font-mono text-[11px] text-dim">
+          <p className="text-xs text-dim">
             {value.trim().length < 8
-              ? "// min 8 characters"
-              : `// ${value.trim().split(/\s+/).length} words · ready`}
+              ? "At least 8 characters"
+              : `${value.trim().split(/\s+/).length} words`}
           </p>
           <button
             type="submit"
             disabled={value.trim().length < 8}
-            className="rounded-xl bg-faint px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-full bg-faint px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Find live twins{" "}
-            <span className="font-mono" aria-hidden>
-              {">"}
-            </span>
+            Find live twins
           </button>
         </div>
       </form>

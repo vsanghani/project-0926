@@ -43,13 +43,12 @@ function ExploreInner() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">
-      <p className="font-mono text-xs text-faint">the_catalog</p>
+      <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">Catalog</p>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight md:text-5xl">
-        <span className="text-faint">{">"} </span>
         Explore live apps
       </h1>
-      <p className="mt-4 max-w-2xl font-mono text-sm leading-6 text-muted">
-        {`// ${liveApps.length} products from Product Hunt, Indie Hackers, directories, and indie sites. First draft, curated.`}
+      <p className="mt-4 max-w-2xl text-sm leading-6 text-muted">
+        {`${liveApps.length} products from Product Hunt, Indie Hackers, directories, and indie sites. Curated by hand.`}
       </p>
 
       <div className="mt-8 flex flex-col gap-3 md:flex-row">
@@ -57,7 +56,7 @@ function ExploreInner() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Filter by name, tag, category…"
-          className="w-full rounded-xl border border-line bg-card px-4 py-3 font-mono text-sm outline-none placeholder:text-dim focus:border-faint/40"
+          className="w-full rounded-xl border border-line bg-card px-4 py-3 text-sm outline-none placeholder:text-dim focus:border-faint/40"
         />
       </div>
 
@@ -91,7 +90,7 @@ function ExploreInner() {
         ))}
       </div>
 
-      <p className="mt-6 font-mono text-xs text-dim">
+      <p className="mt-6 text-xs text-dim">
         {filtered.length} {filtered.length === 1 ? "app" : "apps"}
       </p>
 
@@ -139,12 +138,11 @@ export default function ExplorePage() {
 function ExploreFallback() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">
-      <p className="font-mono text-xs text-faint">the_catalog</p>
+      <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">Catalog</p>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight md:text-5xl">
-        <span className="text-faint">{">"} </span>
         Explore live apps
       </h1>
-      <p className="mt-4 font-mono text-sm text-muted">{`// Loading catalog…`}</p>
+      <p className="mt-4 text-sm text-muted">Loading catalog…</p>
     </div>
   );
 }

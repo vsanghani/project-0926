@@ -34,11 +34,8 @@ export function Footer() {
     <footer className="mt-20 border-t border-line bg-background/90">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:px-6">
         <div>
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-faint font-mono font-semibold text-ink">
-              ≈
-            </span>
-            <span className="font-semibold">Appkin</span>
+          <Link href="/" className="text-[15px] font-semibold tracking-tight">
+            Appkin
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-6 text-muted">
             One place for builders to paste an idea and see similar apps already
@@ -64,7 +61,7 @@ export function Footer() {
         ))}
       </div>
       <div className="mx-auto flex max-w-6xl flex-col gap-2 border-t border-line px-4 py-5 text-xs text-dim md:flex-row md:items-center md:justify-between md:px-6">
-        <p className="font-mono">{">"} 2026 Appkin. First draft.</p>
+        <p>© 2026 Appkin</p>
         <p>Made for builders who look before they ship.</p>
       </div>
     </footer>

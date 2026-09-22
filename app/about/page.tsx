@@ -33,28 +33,24 @@ const journey = [
 
 const features = [
   {
-    icon: "≈",
     title: "Plain-language matching",
     body: "No need to know the competitor's name. Describe the job-to-be-done and we'll rank live products against it.",
-    note: "♡ Built for the blank page",
+    note: "Built for the blank page",
   },
   {
-    icon: "{}",
     title: "Public product catalogs",
     body: "ShipFast, Nomad List, TrustMRR, PhotoAI — live sites with users. Those catalogs are more useful than another idea generator.",
-    note: "♡ Ship logs, not mood boards",
+    note: "Ship logs, not mood boards",
   },
   {
-    icon: "%",
     title: "Overlap, not vibes",
     body: "Each card says why it matched. Tags, category, language. You can disagree with the score — you can see the work.",
-    note: "♡ Receipts on every twin",
+    note: "Receipts on every twin",
   },
   {
-    icon: "<>",
     title: "A named gap",
     body: "If ShipFast exists, a dentist-specific boilerplate might still be open. We write that down so 'it exists' isn't the end.",
-    note: "♡ Wedges beat freeze",
+    note: "Wedges beat freeze",
   },
 ];
 
@@ -81,29 +77,28 @@ export default function AboutPage() {
   return (
     <div>
       <section className="mx-auto max-w-3xl px-4 pb-8 pt-16 text-center md:px-6 md:pt-24">
-        <span className="inline-flex items-center gap-2 rounded-lg border border-line bg-card px-3 py-1 font-mono text-[13px] text-faint">
-          the_story
-        </span>
-        <h1 className="mt-8 text-4xl font-semibold tracking-tight md:text-6xl md:leading-[1.08]">
-          <span className="text-faint">{">"} </span>
+        <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">
+          The story
+        </p>
+        <h1 className="mt-5 text-4xl font-semibold tracking-tight md:text-6xl md:leading-[1.08]">
           Built for builders who
           <br />
           <span className="text-zinc-400">check the map first.</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-xl font-mono text-sm leading-7 text-muted">
-          {`// I got tired of shipping twins I didn't know existed. So I started a catalog.`}
+        <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-muted">
+          I got tired of shipping twins I didn&apos;t know existed. So I started a catalog.
         </p>
       </section>
 
       <section className="mx-auto max-w-3xl px-4 py-8 md:px-6">
         <article className="rounded-2xl border border-line bg-card p-6 md:p-10">
           <div className="flex items-center gap-4">
-            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-faint/12 font-mono text-2xl text-faint">
-              ≈
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-faint/12 text-sm font-semibold text-faint">
+              Ak
             </span>
             <div>
               <h2 className="text-2xl font-semibold">Hey, this is Appkin</h2>
-              <p className="mt-1 font-mono text-xs text-muted">a look-before-you-ship desk</p>
+              <p className="mt-1 text-sm text-muted">A look-before-you-ship desk</p>
             </div>
           </div>
           <div className="mt-8 space-y-5 text-[15px] leading-7 text-muted">
@@ -138,14 +133,14 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-3xl px-4 py-16 md:px-6">
         <SectionHeading
-          badge="> the_journey"
+          badge="The journey"
           title="The Journey"
           comment="From duplicate launches to a single search box."
         />
         <div className="mt-10 space-y-4">
           {journey.map((item) => (
             <article key={item.year} className="flex gap-4">
-              <div className="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl border border-line bg-card font-mono text-sm text-faint">
+              <div className="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl border border-line bg-card text-sm text-faint">
                 {item.year}
               </div>
               <div className="flex-1 rounded-2xl border border-line bg-card p-5">
@@ -159,7 +154,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading
-          badge="> the_sources"
+          badge="Sources"
           title="Where the twins come from"
           comment="Public products. Public URLs. No fake startups."
         />
@@ -172,7 +167,7 @@ export default function AboutPage() {
               rel="noreferrer"
               className="rounded-2xl border border-line bg-card p-6 transition hover:border-faint/30"
             >
-              <p className="font-mono text-[11px] text-faint">{source.countLabel}</p>
+              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-faint">{source.countLabel}</p>
               <h3 className="mt-3 text-lg font-semibold">{source.name}</h3>
               <p className="mt-2 text-sm leading-6 text-muted">{source.blurb}</p>
             </a>
@@ -182,7 +177,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading
-          badge="> what_we_built"
+          badge="What I built"
           title="What I built"
           comment="Every feature solves a night I already wasted."
         />
@@ -194,7 +189,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
-        <SectionHeading badge="> philosophy" title="My philosophy" />
+        <SectionHeading badge="Philosophy" title="My philosophy" />
         <div className="mt-10 grid gap-4 md:grid-cols-2">
           {philosophy.map((item) => (
             <article key={item.title} className="rounded-2xl border border-line bg-card p-6">
@@ -209,15 +204,12 @@ export default function AboutPage() {
         <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
           Ready to find your twins?
         </h2>
-        <p className="mt-3 font-mono text-sm text-muted">{`// Stop guessing. Start comparing.`}</p>
+        <p className="mt-3 text-sm text-muted">Stop guessing. Start comparing.</p>
         <Link
           href="/"
-          className="mt-8 inline-flex rotate-1 rounded-2xl bg-faint px-6 py-3 text-sm font-semibold text-ink transition hover:rotate-0 hover:bg-white"
+          className="mt-8 inline-flex rounded-full bg-faint px-6 py-3 text-sm font-semibold text-ink transition hover:bg-white"
         >
-          Check Your Idea{" "}
-          <span className="font-mono" aria-hidden>
-            {">"}
-          </span>
+          Check your idea
         </Link>
       </section>
     </div>
