@@ -11,7 +11,12 @@ const links = [
   { href: "/about", label: "About" },
 ];
 
-export function Header() {
+type HeaderProps = {
+  email?: string | null;
+  isAdmin?: boolean;
+};
+
+export function Header({ email = null, isAdmin = false }: HeaderProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -45,12 +50,27 @@ export function Header() {
         </nav>
 
         <div className="ml-auto hidden items-center gap-4 md:flex">
-          <button
-            type="button"
-            className="text-sm text-muted transition-colors hover:text-foreground"
-          >
-            Sign In
-          </button>
+          {email ? (
+            <>
+              <Link href="/scans" className="text-sm text-muted transition-colors hover:text-foreground">
+                Scans
+              </Link>
+              {isAdmin ? (
+                <Link href="/admin" className="text-sm text-muted transition-colors hover:text-foreground">
+                  Catalog
+                </Link>
+              ) : null}
+              <form action="/api/auth/sign-out" method="post">
+                <button type="submit" className="text-sm text-muted transition-colors hover:text-foreground">
+                  Sign out
+                </button>
+              </form>
+            </>
+          ) : (
+            <Link href="/sign-in" className="text-sm text-muted transition-colors hover:text-foreground">
+              Sign In
+            </Link>
+          )}
           <Link
             href="/"
             className="rotate-2 rounded-xl bg-faint px-4 py-2 text-left text-[13px] font-semibold leading-tight text-ink transition hover:rotate-0 hover:bg-white"
@@ -92,6 +112,15 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            {email ? (
+              <Link href="/scans" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
+                Scans
+              </Link>
+            ) : (
+              <Link href="/sign-in" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
+                Sign In
+              </Link>
+            )}
             <Link
               href="/"
               onClick={() => setOpen(false)}

@@ -10,8 +10,10 @@ Use these headings: `Added`, `Changed`, `Fixed`, `Removed`.
 
 ### Added
 
-- Internal README covering setup, file structure, and how to change the catalog.
-- This changelog.
+- SQLite catalog at `data/appkin.sqlite`, seeded from the hand-written list on first run.
+- Admin API and `/admin` page to add, edit, feature, and delete products.
+- Accounts, sign-in, and saved scans.
+- `POST /api/match` scores ideas on the server.
 
 ### Changed
 

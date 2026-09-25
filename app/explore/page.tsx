@@ -1,18 +1,37 @@
 "use client";
 
 import { AppCard } from "@/components/AppCard";
-import { liveApps } from "@/lib/catalog";
-import { sources } from "@/lib/sources";
-import type { SourceId } from "@/lib/types";
+import type { LiveApp, Source, SourceId } from "@/lib/types";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 function ExploreInner() {
   const params = useSearchParams();
   const initialSource = params.get("source") as SourceId | null;
+  const [apps, setApps] = useState<LiveApp[]>([]);
+  const [sources, setSources] = useState<Source[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [query, setQuery] = useState("");
   const [source, setSource] = useState<SourceId | "all">(initialSource ?? "all");
   const [category, setCategory] = useState("all");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/apps")
+      .then((response) => response.json())
+      .then((data: { apps: LiveApp[]; sources: Source[] }) => {
+        if (cancelled) return;
+        setApps(data.apps);
+        setSources(data.sources);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (!cancelled) setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     setSource(initialSource ?? "all");
@@ -20,9 +39,9 @@ function ExploreInner() {
 
   const categories = useMemo(() => {
     const pool =
-      source === "all" ? liveApps : liveApps.filter((app) => app.sourceId === source);
+      source === "all" ? apps : apps.filter((app) => app.sourceId === source);
     return Array.from(new Set(pool.map((app) => app.category))).sort();
-  }, [source]);
+  }, [source, apps]);
 
   useEffect(() => {
     if (category !== "all" && !categories.includes(category)) {
@@ -32,14 +51,14 @@ function ExploreInner() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return liveApps.filter((app) => {
+    return apps.filter((app) => {
       if (source !== "all" && app.sourceId !== source) return false;
       if (category !== "all" && app.category !== category) return false;
       if (!q) return true;
       const blob = `${app.name} ${app.tagline} ${app.maker} ${app.category} ${app.tags.join(" ")}`.toLowerCase();
       return blob.includes(q);
     });
-  }, [query, source, category]);
+  }, [query, source, category, apps]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">
@@ -48,7 +67,7 @@ function ExploreInner() {
         Explore live apps
       </h1>
       <p className="mt-4 max-w-2xl text-sm leading-6 text-muted">
-        {`${liveApps.length} products from Product Hunt, Indie Hackers, directories, and indie sites. Curated by hand.`}
+        {`${loaded ? apps.length : "…"} products from Product Hunt, Indie Hackers, directories, and indie sites. Curated by hand.`}
       </p>
 
       <div className="mt-8 flex flex-col gap-3 md:flex-row">
