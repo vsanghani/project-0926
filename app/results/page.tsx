@@ -3,6 +3,7 @@
 import { AppCard } from "@/components/AppCard";
 import { IdeaComposer } from "@/components/IdeaComposer";
 import type { MatchResult } from "@/lib/types";
+import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -20,15 +21,17 @@ function ResultsInner() {
   const [ready, setReady] = useState(false);
   const [matches, setMatches] = useState<MatchResult[]>([]);
   const [summary, setSummary] = useState("");
-  const [saved, setSaved] = useState(false);
+  const [scanId, setScanId] = useState<string | null>(null);
 
   useEffect(() => {
     setReady(false);
     setStage(0);
+    setScanId(null);
     if (!idea) {
       setReady(true);
       setMatches([]);
       setSummary("");
+      setScanId(null);
       return;
     }
 
@@ -43,7 +46,7 @@ function ResultsInner() {
         if (cancelled) return;
         setMatches(data.matches ?? []);
         setSummary(data.summary ?? "");
-        setSaved(Boolean(data.scanId));
+        setScanId(data.scanId ?? null);
       })
       .catch(() => {
         if (!cancelled) setSummary("The catalog could not be scanned. Try again.");
@@ -117,9 +120,15 @@ function ResultsInner() {
         {matches.length ? `${matches.length} live twins` : "No close twins"}
       </h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">{summary}</p>
-      {saved ? (
-        <p className="mt-2 text-sm text-faint">Saved to your scans.</p>
-      ) : null}
+      {scanId ? (
+        <Link href={`/scans/${scanId}`} className="mt-2 inline-block text-sm text-faint">
+          Saved to your scans.
+        </Link>
+      ) : (
+        <Link href="/sign-in" className="mt-2 inline-block text-sm text-muted">
+          Sign in to keep this scan.
+        </Link>
+      )}
 
       <div className="mt-8 rounded-2xl border border-line bg-card p-5">
         <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-dim">Your idea</p>

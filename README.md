@@ -32,6 +32,8 @@ Imports use the `@/` alias, which points at the repo root. `@/lib/catalog` is `l
 | --- | --- |
 | `/` | Home. Idea box, featured products, and product explanation. |
 | `/results?q=` | Scan results for the pasted idea. |
+| `/scans` | Saved scans for the signed-in account. |
+| `/scans/[id]` | Twins saved with one scan. |
 | `/explore` | Full catalog, with source and category filters. `?source=` preselects a source. |
 | `/sources` | Where catalog entries come from. |
 | `/about` | Product story. |
@@ -49,6 +51,8 @@ app/                      Routes and global styles
   explore/layout.tsx      Page title
   results/page.tsx        Idea scan (client component)
   results/layout.tsx      Page title
+  scans/page.tsx          Saved scan list
+  scans/[id]/page.tsx     One saved scan and its twins
   sources/page.tsx
 components/               Shared UI
   Header.tsx              Nav and mobile menu
@@ -88,7 +92,7 @@ The database file is `data/appkin.sqlite`. It is created and filled from `lib/ca
 
 ### Check an idea
 
-`POST /api/match` with `{ "idea": "..." }` scores the catalog on the server. A signed-in user also gets that scan saved. Reopen saved scans at `/scans`.
+`POST /api/match` with `{ "idea": "..." }` scores the catalog on the server. A signed-in user also gets that scan saved, including the matched products. Reopen them at `/scans`. Opening a saved scan does not run the matcher again. `DELETE /api/scans/:id` removes one scan for the signed-in account.
 
 Anyone can create an account at `/sign-in`. Accounts are email and password, stored locally.
 

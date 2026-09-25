@@ -1,5 +1,5 @@
 import { getDb } from "./db";
-import type { IdeaExample, LiveApp, Source, SourceId } from "./types";
+import type { IdeaExample, LiveApp, MatchResult, Source, SourceId } from "./types";
 
 type AppRow = {
   id: string;
@@ -161,6 +161,14 @@ export type ScanRecord = {
   idea: string;
   summary: string;
   createdAt: string;
+  matchCount: number;
+  nearestName?: string;
+  nearestScore?: number;
+};
+
+export type SavedScan = ScanRecord & {
+  matches: MatchResult[];
+  missing: number;
 };
 
 export function saveScan(userId: string, idea: string, summary: string, matches: { appId: string; score: number; reasons: string[] }[]) {
@@ -190,14 +198,87 @@ export function saveScan(userId: string, idea: string, summary: string, matches:
   return id;
 }
 
+type ScanListRow = {
+  id: string;
+  idea: string;
+  summary: string;
+  created_at: string;
+  match_count: number;
+  nearest_name: string | null;
+  nearest_score: number | null;
+};
+
 export function listScans(userId: string): ScanRecord[] {
   const rows = getDb()
-    .prepare("SELECT id, idea, summary, created_at FROM scans WHERE user_id = ? ORDER BY created_at DESC")
-    .all(userId) as { id: string; idea: string; summary: string; created_at: string }[];
-  return plain(rows.map((row) => ({
+    .prepare(
+      `SELECT s.id, s.idea, s.summary, s.created_at,
+        (SELECT COUNT(*) FROM scan_matches WHERE scan_id = s.id) AS match_count,
+        (SELECT a.name FROM scan_matches m JOIN apps a ON a.id = m.app_id
+          WHERE m.scan_id = s.id ORDER BY m.position LIMIT 1) AS nearest_name,
+        (SELECT m.score FROM scan_matches m JOIN apps a ON a.id = m.app_id
+          WHERE m.scan_id = s.id ORDER BY m.position LIMIT 1) AS nearest_score
+       FROM scans s WHERE s.user_id = ? ORDER BY s.created_at DESC`,
+    )
+    .all(userId) as ScanListRow[];
+  return plain(
+    rows.map((row) => ({
+      id: row.id,
+      idea: row.idea,
+      summary: row.summary,
+      createdAt: row.created_at,
+      matchCount: row.match_count,
+      nearestName: row.nearest_name ?? undefined,
+      nearestScore: row.nearest_score ?? undefined,
+    })),
+  );
+}
+
+export function getScan(userId: string, id: string): SavedScan | undefined {
+  const row = getDb()
+    .prepare("SELECT id, idea, summary, created_at FROM scans WHERE id = ? AND user_id = ?")
+    .get(id, userId) as { id: string; idea: string; summary: string; created_at: string } | undefined;
+  if (!row) return undefined;
+
+  const matches = getDb()
+    .prepare("SELECT app_id, score, reasons FROM scan_matches WHERE scan_id = ? ORDER BY position")
+    .all(id) as { app_id: string; score: number; reasons: string }[];
+
+  const resolved: MatchResult[] = [];
+  let missing = 0;
+  for (const match of matches) {
+    const app = getApp(match.app_id);
+    if (!app) {
+      missing += 1;
+      continue;
+    }
+    resolved.push({ app, score: match.score, reasons: JSON.parse(match.reasons) as string[] });
+  }
+
+  return plain({
     id: row.id,
     idea: row.idea,
     summary: row.summary,
     createdAt: row.created_at,
-  })));
+    matchCount: matches.length,
+    nearestName: resolved[0]?.app.name,
+    nearestScore: resolved[0]?.score,
+    matches: resolved,
+    missing,
+  });
+}
+
+export function deleteScan(userId: string, id: string) {
+  const db = getDb();
+  const existing = db.prepare("SELECT id FROM scans WHERE id = ? AND user_id = ?").get(id, userId);
+  if (!existing) return false;
+  db.exec("BEGIN");
+  try {
+    db.prepare("DELETE FROM scan_matches WHERE scan_id = ?").run(id);
+    db.prepare("DELETE FROM scans WHERE id = ? AND user_id = ?").run(id, userId);
+    db.exec("COMMIT");
+  } catch (error) {
+    db.exec("ROLLBACK");
+    throw error;
+  }
+  return true;
 }
