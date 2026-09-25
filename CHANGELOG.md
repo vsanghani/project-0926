@@ -13,6 +13,10 @@ Use these headings: `Added`, `Changed`, `Fixed`, `Removed`.
 - Internal README covering setup, file structure, and how to change the catalog.
 - This changelog.
 
+### Changed
+
+- Restored the nav “Check Your Idea” button to the tilted two-line style.
+
 ## 2026-09-22
 
 ### Changed

@@ -53,9 +53,14 @@ export function Header() {
           </button>
           <Link
             href="/"
-            className="rounded-full bg-faint px-4 py-2 text-sm font-semibold text-ink transition hover:bg-white"
+            className="rotate-2 rounded-xl bg-faint px-4 py-2 text-left text-[13px] font-semibold leading-tight text-ink transition hover:rotate-0 hover:bg-white"
           >
-            Check an idea
+            Check Your
+            <br />
+            Idea{" "}
+            <span className="font-mono" aria-hidden>
+              {">"}
+            </span>
           </Link>
         </div>
 
@@ -90,9 +95,9 @@ export function Header() {
             <Link
               href="/"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-faint px-3 py-2.5 text-center text-sm font-semibold text-ink"
+              className="mt-2 rounded-xl bg-faint px-3 py-2.5 text-center text-sm font-semibold text-ink"
             >
-              Check an idea
+              Check Your Idea
             </Link>
           </nav>
         </div>
