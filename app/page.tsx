@@ -3,8 +3,7 @@ import { AppCard } from "@/components/AppCard";
 import { FeatureCard } from "@/components/FeatureCard";
 import { IdeaComposer } from "@/components/IdeaComposer";
 import { SectionHeading } from "@/components/SectionHeading";
-import { featuredApps } from "@/lib/catalog";
-import { sources } from "@/lib/sources";
+import { listFeaturedApps, listIdeaExamples, listSources } from "@/lib/store";
 
 const steps = [
   {
@@ -76,8 +75,12 @@ const principles = [
   },
 ];
 
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
-  const featured = featuredApps();
+  const featured = listFeaturedApps();
+  const sources = listSources();
+  const examples = listIdeaExamples();
 
   return (
     <div>
@@ -95,7 +98,7 @@ export default function HomePage() {
           Indie Hackers, directories, and more.
         </p>
         <div className="mt-10 text-left">
-          <IdeaComposer />
+          <IdeaComposer examples={examples} />
         </div>
       </section>
 

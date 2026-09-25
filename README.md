@@ -57,11 +57,13 @@ components/               Shared UI
   AppCard.tsx             One live product
   FeatureCard.tsx
   SectionHeading.tsx
-lib/                      Catalog and matching. No React here.
-  catalog.ts              The 50 live products and the example ideas
-  sources.ts              Source labels shown in filters and cards
-  types.ts                LiveApp, Source, and SourceId
-  match.ts                Scoring for a pasted idea
+lib/                      Data and matching
+  db.ts                   SQLite setup and first-run seed
+  store.ts                Catalog and scan queries
+  auth.ts                 Sessions
+  catalog.ts              Seed data for the first run
+  sources.ts              Seed source labels
+  match.ts                Scoring used by POST /api/match
 public/                   Unused create-next-app SVGs. Not part of the brand.
 ```
 
@@ -71,17 +73,24 @@ Config at the root: `package.json`, `tsconfig.json`, `next.config.ts`, `postcss.
 
 ### Add a product
 
-Add one object to `liveApps` in `lib/catalog.ts`.
+Sign in as an admin, then open **Catalog** in the header, or call the API.
 
-- `id` is a short unique slug.
-- `name` and `url` are the product, not a person.
-- `maker` is the product or company name. If it is the same as `name`, the card shows only the source.
-- `sourceId` must be one of `indie-products`, `product-hunt`, `indie-hackers`, `directories`.
-- `tags` and `category` are what matching uses. Write the words a person would use to describe the product.
-- `gap` is the remaining opening next to that product.
-- `featured: true` puts it on the home page.
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env.local` (see `.env.example`). Restart the dev server after changing them. The first request creates that admin if the account does not exist.
 
-Do not add founder names, personal portfolios, or "built by" copy. The catalog lists sites and projects.
+- `POST /api/apps` creates a product. Admin session required.
+- `PATCH /api/apps/:id` edits one, including `featured`.
+- `DELETE /api/apps/:id` removes one.
+- `GET /api/apps` returns the catalog. Public.
+
+The database file is `data/appkin.sqlite`. It is created and filled from `lib/catalog.ts` the first time the app runs. Later edits stay in the database and are not written back to that file.
+
+`maker` is the product or company name. Do not store a person's name.
+
+### Check an idea
+
+`POST /api/match` with `{ "idea": "..." }` scores the catalog on the server. A signed-in user also gets that scan saved. Reopen saved scans at `/scans`.
+
+Anyone can create an account at `/sign-in`. Accounts are email and password, stored locally.
 
 ### Add an example idea
 

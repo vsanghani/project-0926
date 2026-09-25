@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { currentUser } from "@/lib/auth";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import "./globals.css";
@@ -23,7 +24,8 @@ export const metadata: Metadata = {
     "Paste an app idea. Appkin shows similar products already live — sourced from Product Hunt, Indie Hackers, directories, and more.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const user = await currentUser();
   return (
     <html
       lang="en"
@@ -31,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full font-sans">
         <div className="relative z-10 flex min-h-full flex-col">
-          <Header />
+          <Header email={user?.email} isAdmin={user?.isAdmin} />
           <main className="flex-1">{children}</main>
           <Footer />
         </div>

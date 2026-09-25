@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { liveApps } from "@/lib/catalog";
-import { sources } from "@/lib/sources";
+import { listApps, listSources } from "@/lib/store";
 
 export const metadata: Metadata = {
   title: "Sources",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function SourcesPage() {
+  const sources = listSources();
+  const liveApps = listApps();
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">
       <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">Sources</p>

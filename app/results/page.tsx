@@ -2,8 +2,8 @@
 
 import { AppCard } from "@/components/AppCard";
 import { IdeaComposer } from "@/components/IdeaComposer";
-import { matchIdea, matchSummary } from "@/lib/match";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import type { MatchResult } from "@/lib/types";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 const stages = [
@@ -18,17 +18,36 @@ function ResultsInner() {
   const idea = params.get("q")?.trim() ?? "";
   const [stage, setStage] = useState(0);
   const [ready, setReady] = useState(false);
-
-  const matches = useMemo(() => (idea ? matchIdea(idea) : []), [idea]);
-  const summary = matchSummary(matches);
+  const [matches, setMatches] = useState<MatchResult[]>([]);
+  const [summary, setSummary] = useState("");
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     setReady(false);
     setStage(0);
     if (!idea) {
       setReady(true);
+      setMatches([]);
+      setSummary("");
       return;
     }
+
+    let cancelled = false;
+    fetch("/api/match", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idea }),
+    })
+      .then((response) => response.json())
+      .then((data: { matches?: MatchResult[]; summary?: string; scanId?: string | null }) => {
+        if (cancelled) return;
+        setMatches(data.matches ?? []);
+        setSummary(data.summary ?? "");
+        setSaved(Boolean(data.scanId));
+      })
+      .catch(() => {
+        if (!cancelled) setSummary("The catalog could not be scanned. Try again.");
+      });
 
     const timers: number[] = [];
     stages.forEach((_, index) => {
@@ -43,7 +62,10 @@ function ResultsInner() {
         setReady(true);
       }, stages.length * 320 + 180),
     );
-    return () => timers.forEach((id) => window.clearTimeout(id));
+    return () => {
+      cancelled = true;
+      timers.forEach((id) => window.clearTimeout(id));
+    };
   }, [idea]);
 
   if (!idea) {
@@ -95,6 +117,9 @@ function ResultsInner() {
         {matches.length ? `${matches.length} live twins` : "No close twins"}
       </h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">{summary}</p>
+      {saved ? (
+        <p className="mt-2 text-sm text-faint">Saved to your scans.</p>
+      ) : null}
 
       <div className="mt-8 rounded-2xl border border-line bg-card p-5">
         <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-dim">Your idea</p>

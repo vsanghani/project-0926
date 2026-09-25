@@ -2,14 +2,20 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ideaExamples } from "@/lib/catalog";
+import { ideaExamples as defaultExamples } from "@/lib/catalog";
+import type { IdeaExample } from "@/lib/types";
 
 type IdeaComposerProps = {
   initialValue?: string;
   compact?: boolean;
+  examples?: IdeaExample[];
 };
 
-export function IdeaComposer({ initialValue = "", compact = false }: IdeaComposerProps) {
+export function IdeaComposer({
+  initialValue = "",
+  compact = false,
+  examples = defaultExamples,
+}: IdeaComposerProps) {
   const router = useRouter();
   const [value, setValue] = useState(initialValue);
 
@@ -57,7 +63,7 @@ export function IdeaComposer({ initialValue = "", compact = false }: IdeaCompose
 
       {!compact ? (
         <div className="mt-4 flex flex-wrap gap-2">
-          {ideaExamples.map((example) => (
+          {examples.map((example) => (
             <button
               key={example.label}
               type="button"

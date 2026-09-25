@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
-import { sources } from "@/lib/sources";
+import { listSources } from "@/lib/store";
 
 export const metadata: Metadata = {
   title: "About",
@@ -73,7 +73,10 @@ const philosophy = [
   },
 ];
 
+export const dynamic = "force-dynamic";
+
 export default function AboutPage() {
+  const sources = listSources();
   return (
     <div>
       <section className="mx-auto max-w-3xl px-4 pb-8 pt-16 text-center md:px-6 md:pt-24">
