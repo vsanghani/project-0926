@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ideaExamples as defaultExamples } from "@/lib/catalog";
 import type { IdeaExample } from "@/lib/types";
 
 type IdeaComposerProps = {
@@ -14,7 +13,7 @@ type IdeaComposerProps = {
 export function IdeaComposer({
   initialValue = "",
   compact = false,
-  examples = defaultExamples,
+  examples = [],
 }: IdeaComposerProps) {
   const router = useRouter();
   const [value, setValue] = useState(initialValue);

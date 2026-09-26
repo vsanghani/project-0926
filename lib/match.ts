@@ -1,6 +1,4 @@
-import { liveApps } from "./catalog";
-import { sources } from "./sources";
-import type { LiveApp, MatchResult } from "./types";
+import type { LiveApp, MatchResult, Source } from "./types";
 
 const STOP = new Set([
   "a",
@@ -124,7 +122,7 @@ function phraseIn(haystack: string, needle: string) {
   return haystack.includes(needle.toLowerCase());
 }
 
-export function matchIdea(idea: string, catalog: LiveApp[] = liveApps): MatchResult[] {
+export function matchIdea(idea: string, catalog: LiveApp[], sources: Source[] = []): MatchResult[] {
   const cleaned = idea.trim();
   if (cleaned.length < 8) return [];
 

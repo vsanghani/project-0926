@@ -20,6 +20,7 @@ Use these headings: `Added`, `Changed`, `Fixed`, `Removed`.
 
 - Restored the nav “Check Your Idea” button to the tilted two-line style.
 - Admin catalog groups products by source, with search, source filters, and a labeled edit form.
+- Idea matching reads the database catalog on the server. The seed list in `lib/catalog.ts` is no longer sent to the browser.
 
 ## 2026-09-22
 
