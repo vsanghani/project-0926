@@ -7,7 +7,8 @@ export async function POST(request: Request) {
   const idea = body.idea?.trim() ?? "";
   if (idea.length < 8) return Response.json({ error: "Describe the idea in at least 8 characters." }, { status: 400 });
 
-  const matches = matchIdea(idea, listApps());
+  const sources = listSources();
+  const matches = matchIdea(idea, listApps(), sources);
   const summary = matchSummary(matches);
   const user = await currentUser();
   const scanId = user
@@ -19,5 +20,5 @@ export async function POST(request: Request) {
       )
     : null;
 
-  return Response.json({ matches, summary, scanId, sources: listSources() });
+  return Response.json({ matches, summary, scanId, sources });
 }

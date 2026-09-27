@@ -109,7 +109,7 @@ Add a `{ label, text }` entry to `ideaExamples` in `lib/catalog.ts`. Those chips
 
 ### Change how matching works
 
-`matchIdea` in `lib/match.ts` scores every catalog entry and returns up to nine results with a score of at least 14. Ideas shorter than 8 characters return nothing. `matchSummary` writes the sentence above the results.
+`POST /api/match` loads products from the database and scores them with `matchIdea` in `lib/match.ts`. It returns up to nine results with a score of at least 14. Ideas shorter than 8 characters return nothing. `matchSummary` writes the sentence above the results. The browser does not receive the catalog in order to score an idea.
 
 Scores come from a direct name mention, shared tags, category, and overlapping words. Keep changes small and try a few known ideas on `/` before you ship a scoring change.
 
