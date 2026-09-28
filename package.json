@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.3.0",
     "bcryptjs": "^3.0.3",
     "next": "16.3.5",
     "react": "19.2.8",
@@ -24,5 +25,8 @@
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "onnxruntime-node@1.30.0": true
   }
 }
