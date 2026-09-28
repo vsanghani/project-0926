@@ -67,6 +67,12 @@ function createDb() {
       reasons TEXT NOT NULL,
       position INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS app_embeddings (
+      app_id TEXT PRIMARY KEY,
+      model TEXT NOT NULL,
+      text_hash TEXT NOT NULL,
+      vector TEXT NOT NULL
+    );
   `);
   seed(db);
   ensureAdmin(db);
