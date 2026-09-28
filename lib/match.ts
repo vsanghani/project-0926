@@ -1,3 +1,4 @@
+import { cosineSimilarity } from "./embed";
 import type { LiveApp, MatchResult, Source } from "./types";
 
 const STOP = new Set([
@@ -122,7 +123,22 @@ function phraseIn(haystack: string, needle: string) {
   return haystack.includes(needle.toLowerCase());
 }
 
-export function matchIdea(idea: string, catalog: LiveApp[], sources: Source[] = []): MatchResult[] {
+export type EmbeddingIndex = {
+  idea: number[];
+  byAppId: Map<string, number[]>;
+};
+
+function semanticPoints(similarity: number) {
+  if (similarity < 0.32) return 0;
+  return Math.round((similarity - 0.32) * 200);
+}
+
+export function matchIdea(
+  idea: string,
+  catalog: LiveApp[],
+  sources: Source[] = [],
+  embeddings?: EmbeddingIndex,
+): MatchResult[] {
   const cleaned = idea.trim();
   if (cleaned.length < 8) return [];
 
@@ -186,7 +202,14 @@ export function matchIdea(idea: string, catalog: LiveApp[], sources: Source[] = 
       raw += 4;
     }
 
-    const score = Math.max(0, Math.min(97, Math.round(raw)));
+    const vector = embeddings?.byAppId.get(app.id);
+    const meaning = vector && embeddings ? semanticPoints(cosineSimilarity(embeddings.idea, vector)) : 0;
+    if (meaning >= 20 && meaning >= raw) {
+      reasons.push("Close in meaning to your description");
+    }
+    const blended = meaning > 0 ? Math.max(raw, Math.round(raw * 0.5 + meaning * 0.5)) : raw;
+
+    const score = Math.max(0, Math.min(97, Math.round(blended)));
     return { app, score, reasons: unique(reasons).slice(0, 3) };
   });
 

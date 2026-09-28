@@ -121,6 +121,7 @@ export function createApp(input: AppInput) {
       input.featured ? 1 : 0,
       input.gap,
     );
+  clearEmbedding(input.id);
   return getApp(input.id);
 }
 
@@ -148,12 +149,37 @@ export function updateApp(id: string, input: AppInput) {
       id,
     );
   if (result.changes === 0) return undefined;
+  clearEmbedding(id);
+  if (input.id !== id) clearEmbedding(input.id);
   return getApp(input.id);
 }
 
+function clearEmbedding(id: string) {
+  getDb().prepare("DELETE FROM app_embeddings WHERE app_id = ?").run(id);
+}
+
 export function deleteApp(id: string) {
-  const result = getDb().prepare("DELETE FROM apps WHERE id = ?").run(id);
-  return result.changes > 0;
+  const db = getDb();
+  const result = db.prepare("DELETE FROM apps WHERE id = ?").run(id);
+  if (result.changes === 0) return false;
+  clearEmbedding(id);
+  return true;
+}
+
+export function storedEmbeddings(model: string) {
+  const rows = getDb()
+    .prepare("SELECT app_id, text_hash, vector FROM app_embeddings WHERE model = ?")
+    .all(model) as { app_id: string; text_hash: string; vector: string }[];
+  return new Map(rows.map((row) => [row.app_id, { hash: row.text_hash, vector: JSON.parse(row.vector) as number[] }]));
+}
+
+export function saveAppEmbedding(appId: string, model: string, textHash: string, vector: number[]) {
+  getDb()
+    .prepare(
+      `INSERT INTO app_embeddings (app_id, model, text_hash, vector) VALUES (?, ?, ?, ?)
+       ON CONFLICT(app_id) DO UPDATE SET model = excluded.model, text_hash = excluded.text_hash, vector = excluded.vector`,
+    )
+    .run(appId, model, textHash, JSON.stringify(vector));
 }
 
 export type ScanRecord = {

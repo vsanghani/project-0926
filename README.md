@@ -68,6 +68,7 @@ lib/                      Data and matching
   catalog.ts              Seed data for the first run
   sources.ts              Seed source labels
   match.ts                Scoring used by POST /api/match
+  embed.ts                Local embeddings for meaning-based matches
 public/                   Unused create-next-app SVGs. Not part of the brand.
 ```
 
@@ -109,7 +110,7 @@ Add a `{ label, text }` entry to `ideaExamples` in `lib/catalog.ts`. Those chips
 
 ### Change how matching works
 
-`POST /api/match` loads products from the database and scores them with `matchIdea` in `lib/match.ts`. It returns up to nine results with a score of at least 14. Ideas shorter than 8 characters return nothing. `matchSummary` writes the sentence above the results. The browser does not receive the catalog in order to score an idea.
+`POST /api/match` loads products from the database and scores them with `matchIdea` in `lib/match.ts`. Each product also has a vector from the local `all-MiniLM-L6-v2` model, stored in `app_embeddings`. The idea is embedded the same way, and a close meaning can rank a product even when the words do not overlap. Word overlap still counts, and naming a product still outweighs a vague similarity. The model files download into `node_modules` on the first match. It returns up to nine results with a score of at least 14. Ideas shorter than 8 characters return nothing. `matchSummary` writes the sentence above the results. The browser does not receive the catalog in order to score an idea.
 
 Scores come from a direct name mention, shared tags, category, and overlapping words. Keep changes small and try a few known ideas on `/` before you ship a scoring change.
 
