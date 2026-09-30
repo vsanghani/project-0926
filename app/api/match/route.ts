@@ -1,7 +1,8 @@
 import { currentUser } from "@/lib/auth";
+import { FREE_SCAN_LIMIT } from "@/lib/billing";
 import { appEmbeddingText, EMBEDDING_MODEL, embeddingHash, embedText } from "@/lib/embed";
 import { matchIdea, matchSummary } from "@/lib/match";
-import { listApps, listSources, saveAppEmbedding, saveScan, storedEmbeddings } from "@/lib/store";
+import { countScans, listApps, listSources, saveAppEmbedding, saveScan, storedEmbeddings } from "@/lib/store";
 
 async function catalogEmbeddings(apps: ReturnType<typeof listApps>) {
   const stored = storedEmbeddings(EMBEDDING_MODEL);
@@ -37,14 +38,32 @@ export async function POST(request: Request) {
   const matches = matchIdea(idea, apps, sources, embeddings);
   const summary = matchSummary(matches);
   const user = await currentUser();
-  const scanId = user
-    ? saveScan(
+
+  let scanId: string | null = null;
+  let saveStatus: "anonymous" | "saved" | "limit" | "pro" = "anonymous";
+  if (user) {
+    const used = countScans(user.id);
+    if (user.plan === "pro" || used < FREE_SCAN_LIMIT) {
+      scanId = saveScan(
         user.id,
         idea,
         summary,
         matches.map((match) => ({ appId: match.app.id, score: match.score, reasons: match.reasons })),
-      )
-    : null;
+      );
+      saveStatus = user.plan === "pro" ? "pro" : "saved";
+    } else {
+      saveStatus = "limit";
+    }
+  }
 
-  return Response.json({ matches, summary, scanId, sources });
+  return Response.json({
+    matches,
+    summary,
+    scanId,
+    sources,
+    saveStatus,
+    scanLimit: FREE_SCAN_LIMIT,
+    scanCount: user ? countScans(user.id) : 0,
+    plan: user?.plan ?? null,
+  });
 }

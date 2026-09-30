@@ -22,16 +22,19 @@ function ResultsInner() {
   const [matches, setMatches] = useState<MatchResult[]>([]);
   const [summary, setSummary] = useState("");
   const [scanId, setScanId] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"anonymous" | "saved" | "limit" | "pro" | null>(null);
 
   useEffect(() => {
     setReady(false);
     setStage(0);
     setScanId(null);
+    setSaveStatus(null);
     if (!idea) {
       setReady(true);
       setMatches([]);
       setSummary("");
       setScanId(null);
+      setSaveStatus(null);
       return;
     }
 
@@ -42,11 +45,17 @@ function ResultsInner() {
       body: JSON.stringify({ idea }),
     })
       .then((response) => response.json())
-      .then((data: { matches?: MatchResult[]; summary?: string; scanId?: string | null }) => {
+      .then((data: {
+        matches?: MatchResult[];
+        summary?: string;
+        scanId?: string | null;
+        saveStatus?: "anonymous" | "saved" | "limit" | "pro";
+      }) => {
         if (cancelled) return;
         setMatches(data.matches ?? []);
         setSummary(data.summary ?? "");
         setScanId(data.scanId ?? null);
+        setSaveStatus(data.saveStatus ?? (data.scanId ? "saved" : "anonymous"));
       })
       .catch(() => {
         if (!cancelled) setSummary("The catalog could not be scanned. Try again.");
@@ -123,6 +132,10 @@ function ResultsInner() {
       {scanId ? (
         <Link href={`/scans/${scanId}`} className="mt-2 inline-block text-sm text-faint">
           Saved to your scans.
+        </Link>
+      ) : saveStatus === "limit" ? (
+        <Link href="/pricing" className="mt-2 inline-block text-sm text-faint">
+          Free save limit reached. Upgrade to Pro to keep more scans.
         </Link>
       ) : (
         <Link href="/sign-in" className="mt-2 inline-block text-sm text-muted">

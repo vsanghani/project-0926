@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full font-sans">
         <div className="relative z-10 flex min-h-full flex-col">
-          <Header email={user?.email} isAdmin={user?.isAdmin} />
+          <Header email={user?.email} isAdmin={user?.isAdmin} plan={user?.plan ?? null} />
           <main className="flex-1">{children}</main>
           <Footer />
         </div>

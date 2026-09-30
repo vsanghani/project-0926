@@ -46,7 +46,11 @@ function createDb() {
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       is_admin INTEGER NOT NULL DEFAULT 0,
-      created_at TEXT NOT NULL
+      created_at TEXT NOT NULL,
+      stripe_customer_id TEXT,
+      stripe_subscription_id TEXT,
+      plan TEXT NOT NULL DEFAULT 'free',
+      plan_status TEXT
     );
     CREATE TABLE IF NOT EXISTS sessions (
       token TEXT PRIMARY KEY,
@@ -74,9 +78,19 @@ function createDb() {
       vector TEXT NOT NULL
     );
   `);
+  migrateUsers(db);
   seed(db);
   ensureAdmin(db);
   return db;
+}
+
+function migrateUsers(db: DatabaseSync) {
+  const columns = db.prepare("PRAGMA table_info(users)").all() as { name: string }[];
+  const names = new Set(columns.map((column) => column.name));
+  if (!names.has("stripe_customer_id")) db.exec("ALTER TABLE users ADD COLUMN stripe_customer_id TEXT");
+  if (!names.has("stripe_subscription_id")) db.exec("ALTER TABLE users ADD COLUMN stripe_subscription_id TEXT");
+  if (!names.has("plan")) db.exec("ALTER TABLE users ADD COLUMN plan TEXT NOT NULL DEFAULT 'free'");
+  if (!names.has("plan_status")) db.exec("ALTER TABLE users ADD COLUMN plan_status TEXT");
 }
 
 function ensureAdmin(db: DatabaseSync) {

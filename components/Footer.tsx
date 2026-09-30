@@ -24,6 +24,7 @@ const columns = [
     links: [
       { href: "/about", label: "About" },
       { href: "/sources", label: "How we source" },
+      { href: "/pricing", label: "Pricing" },
       { href: "mailto:hello@appkin.app", label: "Contact" },
     ],
   },

@@ -14,9 +14,10 @@ const links = [
 type HeaderProps = {
   email?: string | null;
   isAdmin?: boolean;
+  plan?: "free" | "pro" | null;
 };
 
-export function Header({ email = null, isAdmin = false }: HeaderProps) {
+export function Header({ email = null, isAdmin = false, plan = null }: HeaderProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -55,6 +56,9 @@ export function Header({ email = null, isAdmin = false }: HeaderProps) {
               <Link href="/scans" className="text-sm text-muted transition-colors hover:text-foreground">
                 Scans
               </Link>
+              <Link href="/account" className="text-sm text-muted transition-colors hover:text-foreground">
+                {plan === "pro" ? "Pro" : "Account"}
+              </Link>
               {isAdmin ? (
                 <Link href="/admin" className="text-sm text-muted transition-colors hover:text-foreground">
                   Catalog
@@ -67,9 +71,14 @@ export function Header({ email = null, isAdmin = false }: HeaderProps) {
               </form>
             </>
           ) : (
-            <Link href="/sign-in" className="text-sm text-muted transition-colors hover:text-foreground">
-              Sign In
-            </Link>
+            <>
+              <Link href="/pricing" className="text-sm text-muted transition-colors hover:text-foreground">
+                Pricing
+              </Link>
+              <Link href="/sign-in" className="text-sm text-muted transition-colors hover:text-foreground">
+                Sign In
+              </Link>
+            </>
           )}
           <Link
             href="/"
@@ -113,13 +122,23 @@ export function Header({ email = null, isAdmin = false }: HeaderProps) {
               </Link>
             ))}
             {email ? (
-              <Link href="/scans" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
-                Scans
-              </Link>
+              <>
+                <Link href="/scans" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
+                  Scans
+                </Link>
+                <Link href="/account" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
+                  Account
+                </Link>
+              </>
             ) : (
-              <Link href="/sign-in" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
-                Sign In
-              </Link>
+              <>
+                <Link href="/pricing" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
+                  Pricing
+                </Link>
+                <Link href="/sign-in" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted">
+                  Sign In
+                </Link>
+              </>
             )}
             <Link
               href="/"
