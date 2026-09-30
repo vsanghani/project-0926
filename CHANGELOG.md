@@ -14,6 +14,7 @@ Use these headings: `Added`, `Changed`, `Fixed`, `Removed`.
 - Admin API and `/admin` page to add, edit, feature, and delete products.
 - Accounts, sign-in, and saved scans.
 - A saved scan keeps its matched products and opens at `/scans/[id]`.
+- Free and Pro billing through Stripe. Matching stays free. Free accounts keep 5 scans; Pro keeps unlimited.
 - `POST /api/match` scores ideas on the server.
 
 ### Changed

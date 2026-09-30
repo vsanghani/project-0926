@@ -34,6 +34,8 @@ Imports use the `@/` alias, which points at the repo root. `@/lib/catalog` is `l
 | `/results?q=` | Scan results for the pasted idea. |
 | `/scans` | Saved scans for the signed-in account. |
 | `/scans/[id]` | Twins saved with one scan. |
+| `/pricing` | Free vs Pro. |
+| `/account` | Plan status and Stripe billing. |
 | `/explore` | Full catalog, with source and category filters. `?source=` preselects a source. |
 | `/sources` | Where catalog entries come from. |
 | `/about` | Product story. |
@@ -64,7 +66,8 @@ components/               Shared UI
 lib/                      Data and matching
   db.ts                   SQLite setup and first-run seed
   store.ts                Catalog and scan queries
-  auth.ts                 Sessions
+  auth.ts                 Sessions and plan fields
+  billing.ts              Stripe helpers and Free save limit
   catalog.ts              Seed data for the first run
   sources.ts              Seed source labels
   match.ts                Scoring used by POST /api/match
@@ -93,9 +96,24 @@ The database file is `data/appkin.sqlite`. It is created and filled from `lib/ca
 
 ### Check an idea
 
-`POST /api/match` with `{ "idea": "..." }` scores the catalog on the server. A signed-in user also gets that scan saved, including the matched products. Reopen them at `/scans`. Opening a saved scan does not run the matcher again. `DELETE /api/scans/:id` removes one scan for the signed-in account.
+`POST /api/match` with `{ "idea": "..." }` scores the catalog on the server. A signed-in user also gets that scan saved, including the matched products, until the Free save limit. Reopen them at `/scans`. Opening a saved scan does not run the matcher again. `DELETE /api/scans/:id` removes one scan for the signed-in account.
 
 Anyone can create an account at `/sign-in`. Accounts are email and password, stored locally.
+
+### Billing
+
+Matching is free for everyone. A Free account keeps 5 saved scans. Pro removes that limit.
+
+Set these in `.env.local` (see `.env.example`):
+
+- `NEXT_PUBLIC_APP_URL` — public site URL used in Stripe redirects
+- `STRIPE_SECRET_KEY`
+- `STRIPE_PRICE_ID` — recurring Price id for Pro
+- `STRIPE_WEBHOOK_SECRET` — for `POST /api/billing/webhook`
+
+Create a Product and monthly Price in the Stripe Dashboard, then point `STRIPE_PRICE_ID` at that Price. For local webhooks, use the Stripe CLI: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
+
+Checkout is `POST /api/billing/checkout`. The customer portal is `POST /api/billing/portal`. Admin accounts are treated as Pro without Stripe.
 
 ### Add an example idea
 

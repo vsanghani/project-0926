@@ -234,6 +234,11 @@ type ScanListRow = {
   nearest_score: number | null;
 };
 
+export function countScans(userId: string) {
+  const row = getDb().prepare("SELECT COUNT(*) AS n FROM scans WHERE user_id = ?").get(userId) as { n: number };
+  return row.n;
+}
+
 export function listScans(userId: string): ScanRecord[] {
   const rows = getDb()
     .prepare(
