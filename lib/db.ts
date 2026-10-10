@@ -77,11 +77,28 @@ function createDb() {
       text_hash TEXT NOT NULL,
       vector TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS shared_scans (
+      id TEXT PRIMARY KEY,
+      scan_id TEXT,
+      idea TEXT NOT NULL,
+      summary TEXT NOT NULL,
+      matches_json TEXT NOT NULL,
+      intelligence_json TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      view_count INTEGER NOT NULL DEFAULT 0
+    );
   `);
   migrateUsers(db);
+  migrateScans(db);
   seed(db);
   ensureAdmin(db);
   return db;
+}
+
+function migrateScans(db: DatabaseSync) {
+  const columns = db.prepare("PRAGMA table_info(scans)").all() as { name: string }[];
+  const names = new Set(columns.map((column) => column.name));
+  if (!names.has("intelligence_json")) db.exec("ALTER TABLE scans ADD COLUMN intelligence_json TEXT");
 }
 
 function migrateUsers(db: DatabaseSync) {
