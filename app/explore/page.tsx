@@ -33,9 +33,11 @@ function ExploreInner() {
     };
   }, []);
 
-  useEffect(() => {
+  const [prevInitialSource, setPrevInitialSource] = useState(initialSource);
+  if (initialSource !== prevInitialSource) {
+    setPrevInitialSource(initialSource);
     setSource(initialSource ?? "all");
-  }, [initialSource]);
+  }
 
   const categories = useMemo(() => {
     const pool =
@@ -43,22 +45,18 @@ function ExploreInner() {
     return Array.from(new Set(pool.map((app) => app.category))).sort();
   }, [source, apps]);
 
-  useEffect(() => {
-    if (category !== "all" && !categories.includes(category)) {
-      setCategory("all");
-    }
-  }, [categories, category]);
+  const activeCategory = category !== "all" && categories.includes(category) ? category : "all";
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return apps.filter((app) => {
       if (source !== "all" && app.sourceId !== source) return false;
-      if (category !== "all" && app.category !== category) return false;
+      if (activeCategory !== "all" && app.category !== activeCategory) return false;
       if (!q) return true;
       const blob = `${app.name} ${app.tagline} ${app.maker} ${app.category} ${app.tags.join(" ")}`.toLowerCase();
       return blob.includes(q);
     });
-  }, [query, source, category, apps]);
+  }, [query, source, activeCategory, apps]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">

@@ -38,3 +38,37 @@ export type IdeaExample = {
   label: string;
   text: string;
 };
+
+export type WedgeAngle = {
+  id: "vertical" | "workflow" | "pricing";
+  title: string;
+  badge: string;
+  hook: string;
+  description: string;
+  exampleAction: string;
+};
+
+export type ViabilityRadar = {
+  saturationScore: number;
+  saturationLevel: "Low / Untapped" | "Moderate Competition" | "High / Crowded";
+  saturationComment: string;
+  wedgePotentialScore: number;
+  wedgePotentialLevel: "Expansive Whitespace" | "Defined Wedge" | "Narrow Angle Needed";
+  speedToMvp: "1-3 Days (Micro-MVP)" | "1-2 Weeks (Standard SaaS)" | "1-2 Months (Deep Tech / Platform)";
+  monetizationModel: string;
+  angles: WedgeAngle[];
+  closestCompetitorName?: string;
+  closestCompetitorGap?: string;
+};
+
+export type SharedScan = {
+  id: string;
+  scanId?: string;
+  idea: string;
+  summary: string;
+  matches: MatchResult[];
+  intelligence: ViabilityRadar;
+  createdAt: string;
+  viewCount: number;
+};
+

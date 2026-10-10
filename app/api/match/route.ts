@@ -1,6 +1,7 @@
 import { currentUser } from "@/lib/auth";
 import { FREE_SCAN_LIMIT } from "@/lib/billing";
 import { appEmbeddingText, EMBEDDING_MODEL, embeddingHash, embedText } from "@/lib/embed";
+import { generateViabilityRadar } from "@/lib/intelligence";
 import { matchIdea, matchSummary } from "@/lib/match";
 import { countScans, listApps, listSources, saveAppEmbedding, saveScan, storedEmbeddings } from "@/lib/store";
 
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
   }
   const matches = matchIdea(idea, apps, sources, embeddings);
   const summary = matchSummary(matches);
+  const intelligence = generateViabilityRadar(idea, matches);
   const user = await currentUser();
 
   let scanId: string | null = null;
@@ -49,6 +51,7 @@ export async function POST(request: Request) {
         idea,
         summary,
         matches.map((match) => ({ appId: match.app.id, score: match.score, reasons: match.reasons })),
+        intelligence,
       );
       saveStatus = user.plan === "pro" ? "pro" : "saved";
     } else {
@@ -59,6 +62,7 @@ export async function POST(request: Request) {
   return Response.json({
     matches,
     summary,
+    intelligence,
     scanId,
     sources,
     saveStatus,

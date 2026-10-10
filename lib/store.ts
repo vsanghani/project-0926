@@ -1,5 +1,6 @@
 import { getDb } from "./db";
-import type { IdeaExample, LiveApp, MatchResult, Source, SourceId } from "./types";
+import { generateViabilityRadar } from "./intelligence";
+import type { IdeaExample, LiveApp, MatchResult, SharedScan, Source, SourceId, ViabilityRadar } from "./types";
 
 type AppRow = {
   id: string;
@@ -195,20 +196,30 @@ export type ScanRecord = {
 export type SavedScan = ScanRecord & {
   matches: MatchResult[];
   missing: number;
+  intelligence: ViabilityRadar;
 };
 
-export function saveScan(userId: string, idea: string, summary: string, matches: { appId: string; score: number; reasons: string[] }[]) {
+export function saveScan(
+  userId: string,
+  idea: string,
+  summary: string,
+  matches: { appId: string; score: number; reasons: string[] }[],
+  intelligence?: ViabilityRadar,
+) {
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
   const db = getDb();
   db.exec("BEGIN");
   try {
-    db.prepare("INSERT INTO scans (id, user_id, idea, summary, created_at) VALUES (?, ?, ?, ?, ?)").run(
+    db.prepare(
+      "INSERT INTO scans (id, user_id, idea, summary, created_at, intelligence_json) VALUES (?, ?, ?, ?, ?, ?)",
+    ).run(
       id,
       userId,
       idea,
       summary,
       createdAt,
+      intelligence ? JSON.stringify(intelligence) : null,
     );
     const insert = db.prepare(
       "INSERT INTO scan_matches (scan_id, app_id, score, reasons, position) VALUES (?, ?, ?, ?, ?)",
@@ -266,8 +277,8 @@ export function listScans(userId: string): ScanRecord[] {
 
 export function getScan(userId: string, id: string): SavedScan | undefined {
   const row = getDb()
-    .prepare("SELECT id, idea, summary, created_at FROM scans WHERE id = ? AND user_id = ?")
-    .get(id, userId) as { id: string; idea: string; summary: string; created_at: string } | undefined;
+    .prepare("SELECT id, idea, summary, created_at, intelligence_json FROM scans WHERE id = ? AND user_id = ?")
+    .get(id, userId) as { id: string; idea: string; summary: string; created_at: string; intelligence_json: string | null } | undefined;
   if (!row) return undefined;
 
   const matches = getDb()
@@ -285,6 +296,17 @@ export function getScan(userId: string, id: string): SavedScan | undefined {
     resolved.push({ app, score: match.score, reasons: JSON.parse(match.reasons) as string[] });
   }
 
+  let intelligence: ViabilityRadar;
+  if (row.intelligence_json) {
+    try {
+      intelligence = JSON.parse(row.intelligence_json) as ViabilityRadar;
+    } catch {
+      intelligence = generateViabilityRadar(row.idea, resolved);
+    }
+  } else {
+    intelligence = generateViabilityRadar(row.idea, resolved);
+  }
+
   return plain({
     id: row.id,
     idea: row.idea,
@@ -295,6 +317,7 @@ export function getScan(userId: string, id: string): SavedScan | undefined {
     nearestScore: resolved[0]?.score,
     matches: resolved,
     missing,
+    intelligence,
   });
 }
 
@@ -312,4 +335,64 @@ export function deleteScan(userId: string, id: string) {
     throw error;
   }
   return true;
+}
+
+export function saveSharedScan(data: {
+  scanId?: string;
+  idea: string;
+  summary: string;
+  matches: MatchResult[];
+  intelligence: ViabilityRadar;
+}): string {
+  const id = crypto.randomUUID();
+  const createdAt = new Date().toISOString();
+  getDb()
+    .prepare(
+      `INSERT INTO shared_scans (id, scan_id, idea, summary, matches_json, intelligence_json, created_at, view_count)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 0)`,
+    )
+    .run(
+      id,
+      data.scanId ?? null,
+      data.idea,
+      data.summary,
+      JSON.stringify(data.matches),
+      JSON.stringify(data.intelligence),
+      createdAt,
+    );
+  return id;
+}
+
+export function getSharedScan(id: string): SharedScan | undefined {
+  const db = getDb();
+  const row = db
+    .prepare(
+      "SELECT id, scan_id, idea, summary, matches_json, intelligence_json, created_at, view_count FROM shared_scans WHERE id = ?",
+    )
+    .get(id) as {
+      id: string;
+      scan_id: string | null;
+      idea: string;
+      summary: string;
+      matches_json: string;
+      intelligence_json: string;
+      created_at: string;
+      view_count: number;
+    } | undefined;
+
+  if (!row) return undefined;
+
+  // Increment view count
+  db.prepare("UPDATE shared_scans SET view_count = view_count + 1 WHERE id = ?").run(id);
+
+  return plain({
+    id: row.id,
+    scanId: row.scan_id ?? undefined,
+    idea: row.idea,
+    summary: row.summary,
+    matches: JSON.parse(row.matches_json) as MatchResult[],
+    intelligence: JSON.parse(row.intelligence_json) as ViabilityRadar,
+    createdAt: row.created_at,
+    viewCount: row.view_count + 1,
+  });
 }
